@@ -1,7 +1,12 @@
-  int counter = 0;
 
 #include <PRIZM.h>      //link up the library
 PRIZM prizm;            //declare object(reference to prism)
+
+//int counter = 0;
+
+bool isMorning = true;
+
+String myName = "Sam";
 
 void setup() {
   prizm.PrizmBegin();
@@ -11,7 +16,16 @@ void setup() {
 }
 
 void loop() {
-  counter += 1;
-  Serial.println("loop"+ String(counter));
-  delay(1000);
+  //counter += 1;
+  //Serial.println("loop"+ String(counter));
+  //delay(1000);
+  if(isMorning==true){
+    Serial.println("Good Morning " + myName);
+    delay(1000);
+    isMorning = false;
+  } else {
+    Serial.println("Good Afternoon " + myName);
+    delay(1000);
+    isMorning = true;
+  }
 }
