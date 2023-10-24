@@ -10,15 +10,20 @@ void setup(){
 }
 void loop(){
   int distance = prizm.readSonicSensorCM(5);
-  if(distance < 30){
+  if(distance < 60){
+    prizm.setServoPosition(1,90);
     forwardslow();
     if(distance < 15){
+    prizm.setServoPosition(1,0);
       BREAK();
+      delay(1000);
+      backward();
       delay(1000);
       pivotright();
       delay(250);
     }
   } else {
+    prizm.setServoPosition(1,180);
     forward();
   }
 }
