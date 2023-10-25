@@ -1,0 +1,60 @@
+//Code for Workcube
+
+#include <PRIZM.h>      //link up the library
+PRIZM prizm;            //declare object(reference to prism)
+
+void setup(){
+  prizm.PrizmBegin();
+  prizm.setMotorInvert(2,1);
+  Serial.begin(9600);
+}
+void loop(){
+  int distance = prizm.readSonicSensorCM(5);
+  if(distance < 30){
+      prizm.setServoPosition(1,180);
+      BREAK();
+      delay(1000);
+      backward();
+      delay(1000);
+  } else {
+    SPEED();
+  }
+}
+
+void SPEED(){
+  int distance = prizm.readSonicSensorCM(5);
+  int mappedValue = map(distance,0,300,0,720);
+  prizm.setMotorSpeeds(mappedValue,mappedValue);
+}
+
+void forward(){
+  prizm.setMotorSpeeds(720,720);
+}
+
+void forwardslow(){
+  prizm.setMotorSpeeds(360,360);
+}
+
+void backward(){
+  prizm.setMotorSpeeds(-720,-720);
+}
+
+void pivotright(){
+  prizm.setMotorSpeeds(-720,720);
+}
+
+void pivotleft(){
+  prizm.setMotorSpeeds(720,-720);
+}
+
+void turnright(){
+  prizm.setMotorSpeeds(360,720);
+}
+
+void turnleft(){
+  prizm.setMotorSpeeds(720,360);
+}
+
+void BREAK(){
+  prizm.setMotorSpeeds(0,0);
+}
