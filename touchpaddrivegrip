@@ -1,0 +1,48 @@
+#include <PRIZM.h>    // TETRIX PRIZM Library
+#include <TELEOP.h>   // TETRIX TeleOp module Library
+
+PRIZM prizm;          // Create an instance within the PRIZM Library class named prizm
+PS4 ps4;              // Create an instance within the PS4 Library class named ps4
+
+int gripperClose = 110;
+int gripperOpen = 58;
+int PowerM1;
+int PowerM2;
+int maggie;
+
+void setup() {
+ Serial.begin(115200);      // Serial Monitor baud rate 
+ prizm.PrizmBegin();        // Intializes the PRIZM controller and waits here for press of green start button
+ ps4.setDeadZone(LEFT,10);    // set the Left Joystick dead zone range to +/- 10 
+ ps4.setDeadZone(RIGHT,10);   // set the Right Joystick dead zone range to +/- 10 
+ prizm.setMotorInvert(2,1);
+}
+
+void loop() {
+  ps4.getPS4();
+    if(ps4.Connected){
+    int touchx = ps4.Touchpad(TOUCHX);
+    int maggie = map(touchx,0,1920,0,100);
+    Serial.print(maggie);
+    drive();
+      if(ps4.Button(L1)){
+       moveGripper(gripperOpen);
+      }
+      if(ps4.Button(R1)){
+       moveGripper(gripperClose);
+      }
+    } else {
+      prizm.setMotorPowers(0,0);
+    }
+}
+
+void drive(){
+    PowerM1 = int(ps4.Motor(LY)*(maggie/100));  
+    PowerM2 = int(ps4.Motor(RY)*(maggie/100));   
+    prizm.setMotorPowers(PowerM1, PowerM2);
+}
+
+void moveGripper(int angle){
+  prizm.setServoPosition(2,angle);
+  delay(100);
+}
